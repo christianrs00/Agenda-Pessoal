@@ -1,0 +1,249 @@
+# Escopo do Projeto: Agenda Pessoal em Python
+
+## 1. Visão geral do projeto
+
+Nome do projeto: Agenda Pessoal
+
+Descrição: Desenvolver uma aplicação desktop simples para gerenciamento de compromissos pessoais, utilizando Python como linguagem de programação, Tkinter para a interface gráfica e SQLite3 para armazenamento dos dados.
+
+O sistema permitirá que o usuário cadastre, visualize, edite e exclua compromissos, mantendo as informações salvas em um banco de dados local.
+
+## 2. Objetivo geral
+
+Criar uma agenda pessoal intuitiva e funcional que facilite a organização de tarefas, eventos e compromissos diários, aplicando conceitos básicos de programação, interfaces gráficas e persistência de dados.
+
+## 3. Tecnologias utilizadas
+
+The Python Programming Logo: A Symbol Of Innovation And Community – peerdh.com
+
+Python
+
+Linguagem principal para implementar as regras de negócio e a lógica da aplicação.
+
+Graphical user interfaces
+
+Tkinter
+
+Biblioteca utilizada para construir as janelas, os formulários, os botões e as listas de compromissos.
+
+Logo SQLite – Logos PNG
+
+SQLite3
+
+Banco de dados local para armazenar os compromissos sem precisar de um servidor de banco de dados separado.
+
+As três tecnologias são suficientes para a primeira versão. O Python já inclui os módulos `tkinter` e `sqlite3` em muitas instalações, embora o Tkinter possa precisar ser instalado separadamente em alguns sistemas Linux.
+
+## 4. Escopo funcional
+
+O projeto será dividido em cinco funcionalidades principais.
+
+4.1. Cadastro de compromissos
+
+- Informar título do compromisso.
+- Adicionar descrição opcional.
+- Definir data e horário.
+- Salvar o compromisso no banco de dados.
+- Validar campos obrigatórios.
+
+4.2. Listagem de compromissos
+
+- Exibir os compromissos cadastrados em uma tabela.
+- Mostrar título, data, horário e descrição.
+- Ordenar os compromissos por data e horário.
+- Permitir visualizar os detalhes de cada registro.
+
+4.3. Edição de compromissos
+
+- Selecionar um compromisso existente.
+- Alterar título, descrição, data ou horário.
+- Atualizar as informações no banco de dados.
+
+4.4. Exclusão de compromissos
+
+- Selecionar um registro.
+- Solicitar confirmação antes da exclusão.
+- Remover o registro do banco de dados.
+- Atualizar a lista após a operação.
+
+4.5. Consulta e organização
+
+- Consultar compromissos por data.
+- Exibir os eventos em ordem cronológica.
+- Permitir filtrar os compromissos de um dia específico.
+
+## 5. Requisitos do sistema
+
+### Requisitos funcionais (RF)
+
+| Código | Requisito |
+| --- | --- |
+| RF01 | O sistema deve permitir cadastrar compromissos. |
+| RF02 | O sistema deve permitir listar os compromissos salvos. |
+| RF03 | O sistema deve permitir editar compromissos existentes. |
+| RF04 | O sistema deve permitir excluir compromissos com confirmação. |
+| RF05 | O sistema deve permitir consultar compromissos por data. |
+| RF06 | O sistema deve validar os campos obrigatórios. |
+| RF07 | O sistema deve preservar os dados após ser fechado. |
+
+### Requisitos não funcionais (RNF)
+
+| Código | Requisito |
+| --- | --- |
+| RNF01 | A interface deve ser simples e intuitiva. |
+| RNF02 | O banco de dados deve ser local, utilizando SQLite3. |
+| RNF03 | O código deve ser organizado e de fácil manutenção. |
+| RNF04 | As operações devem apresentar mensagens de sucesso ou erro. |
+| RNF05 | As consultas e alterações devem utilizar consultas SQL parametrizadas. |
+| RNF06 | O sistema deve funcionar em um ambiente desktop com Python e Tkinter disponíveis. |
+
+## 6. Interface gráfica proposta
+
+A tela principal poderá seguir o seguinte modelo conceitual:
+
+## Minha Agenda
+
+Gerenciamento de compromissos pessoais
+
+### Novo compromisso
+
+Título
+
+Reunião de trabalho
+
+Descrição
+
+Discutir o andamento do projeto
+
+Data
+
+22/10/2026
+
+Horário
+
+14:00
+
++ Salvar compromisso
+
+### Compromissos cadastrados
+
+Reunião de trabalho
+
+22/10/2026 · 14:00
+
+Consulta pessoal
+
+23/10/2026 · 09:30
+
+Ilustração conceitual da interface, não uma aplicação em funcionamento.
+
+A interface real será desenvolvida com widgets do Tkinter, como `Label`, `Entry`, `Text`, `Button`, `Frame` e `ttk.Treeview`.
+
+## 7. Modelagem do banco de dados
+
+O banco de dados será armazenado em um arquivo chamado `agenda.db`.
+
+A primeira versão utilizará uma única tabela, chamada `compromissos`.
+
+| Campo | Tipo SQLite | Descrição |
+| --- | --- | --- |
+| `id` | INTEGER | Identificador único, chave primária |
+| `titulo` | TEXT | Título do compromisso, obrigatório |
+| `descricao` | TEXT | Detalhes adicionais |
+| `data` | TEXT | Data no formato `AAAA-MM-DD` |
+| `horario` | TEXT | Horário no formato `HH:MM` |
+| `criado_em` | TEXT | Data e hora do cadastro |
+
+Exemplo de criação da tabela:
+
+sql
+```
+CREATE TABLE IF NOT EXISTS compromissos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    data TEXT NOT NULL,
+    horario TEXT NOT NULL,
+    criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+A chave primária `id` permitirá identificar cada compromisso nas operações de edição e exclusão.
+
+## 8. Arquitetura e organização dos arquivos
+
+Para manter o projeto simples, mas organizado, sugere-se a seguinte estrutura:
+
+agenda\_pessoal/
+
+main.py
+
+Ponto de entrada da aplicação e inicialização da janela principal.
+
+interface.py
+
+Criação da interface gráfica, formulários, tabela e eventos dos botões.
+
+database.py
+
+Conexão SQLite3, criação da tabela e operações de cadastro, consulta, edição e exclusão.
+
+agenda.db
+
+Arquivo do banco de dados, criado automaticamente quando necessário.
+
+Essa divisão separa a interface do acesso aos dados, facilitando testes e futuras melhorias.
+
+## 9. Etapas de desenvolvimento
+
+1. Etapa 1 — Planejamento: definir os requisitos, os campos dos compromissos e o layout da tela principal.
+2. Etapa 2 — Banco de dados: implementar a conexão com SQLite3 e criar a tabela automaticamente.
+3. Etapa 3 — Interface: construir a janela principal e os campos de cadastro usando Tkinter.
+4. Etapa 4 — Operações CRUD: implementar cadastro (Create), consulta (Read), edição (Update) e exclusão (Delete).
+5. Etapa 5 — Validação: testar campos obrigatórios, datas, horários e mensagens de erro.
+6. Etapa 6 — Testes finais: verificar a persistência dos dados, a navegação da interface e o funcionamento geral.
+
+## 10. Cronograma estimado
+
+| Atividade | Tempo estimado |
+| --- | --- |
+| Planejamento e modelagem | 2 horas |
+| Banco de dados | 2 horas |
+| Interface gráfica | 4 horas |
+| Funcionalidades CRUD | 4 horas |
+| Validação e testes | 2 horas |
+| Total estimado | 14 horas |
+
+Estimativa para uma versão básica, considerando familiaridade inicial com Python e programação desktop.
+
+## 11. Critérios de aceitação
+
+O projeto será considerado concluído quando:
+
+- [ ]O usuário conseguir cadastrar um compromisso com título, data e horário.
+- [ ]Os compromissos cadastrados forem exibidos na interface.
+- [ ]For possível editar e excluir registros.
+- [ ]O sistema permitir consultar compromissos por data.
+- [ ]Os dados permanecerem salvos após fechar e reabrir o programa.
+- [ ]O sistema impedir o cadastro sem os campos obrigatórios.
+- [ ]A aplicação funcionar sem exigir um servidor externo de banco de dados.
+
+## 12. O que não faz parte da primeira versão
+
+Para manter o projeto simples, os seguintes recursos ficam fora do escopo inicial:
+
+- Login e cadastro de usuários.
+- Sincronização com Google Agenda ou outros serviços.
+- Notificações automáticas e alarmes.
+- Aplicativo para celular.
+- Banco de dados remoto ou compartilhamento entre computadores.
+- Integração com e-mail e envio de convites.
+- Relatórios avançados e exportação para PDF.
+
+Esses recursos poderão ser adicionados em versões futuras, caso necessário.
+
+## 13. Resultado esperado
+
+Ao final, será entregue uma aplicação desktop funcional de agenda pessoal, com interface gráfica em Tkinter, persistência de dados em SQLite3 e operações completas de gerenciamento de compromissos. O projeto servirá também como exercício prático de programação orientada a objetos, manipulação de banco de dados e desenvolvimento de interfaces gráficas em Python.
+
+Próximo passo: posso transformar esse escopo em um projeto Python completo com os arquivos e o código ou elaborar um documento formal de especificação do projeto.
