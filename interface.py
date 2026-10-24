@@ -1,6 +1,76 @@
 from tkinter import messagebox, ttk
 import tkinter as tk
+import tkinter.font as tkfont
+from math import cos, pi, sin
 import database
+
+
+class BotaoArredondado(tk.Canvas):
+  def __init__(self, parent, text, command, color, hover_color, text_color="white"):
+    font = ("Arial", 10, "bold")
+    self.font = tkfont.Font(parent, font=font)
+    width = max(104, self.font.measure(text) + 36)
+    height = 40
+    super().__init__(
+        parent,
+        width=width,
+        height=height,
+        bg=parent.cget("bg"),
+        highlightthickness=0,
+        takefocus=True,
+        cursor="hand2",
+    )
+    self.command = command
+    self.color = color
+    self.hover_color = hover_color
+    self.shape = self.create_polygon(
+        self._rounded_rectangle(width, height, 12),
+        smooth=True,
+        splinesteps=24,
+        fill=color,
+        outline=color,
+    )
+    self.create_text(
+        width / 2,
+        height / 2,
+        text=text,
+        font=font,
+        fill=text_color,
+    )
+    self.bind("<Enter>", self._on_enter)
+    self.bind("<Leave>", self._on_leave)
+    self.bind("<Button-1>", self._on_click)
+    self.bind("<Return>", self._on_activate)
+    self.bind("<space>", self._on_activate)
+
+  @staticmethod
+  def _rounded_rectangle(width, height, radius):
+    points = []
+    for center_x, center_y, start_angle in (
+        (width - radius, radius, -pi / 2),
+        (width - radius, height - radius, 0),
+        (radius, height - radius, pi / 2),
+        (radius, radius, pi),
+    ):
+      for step in range(7):
+        angle = start_angle + step * pi / 12
+        points.extend(
+            (center_x + radius * cos(angle), center_y + radius * sin(angle))
+        )
+    return points
+
+  def _on_enter(self, event):
+    self.itemconfigure(self.shape, fill=self.hover_color, outline=self.hover_color)
+
+  def _on_leave(self, event):
+    self.itemconfigure(self.shape, fill=self.color, outline=self.color)
+
+  def _on_click(self, event):
+    self.focus_set()
+    self.command()
+
+  def _on_activate(self, event):
+    self.command()
 
 
 class AgendaApp:
@@ -8,7 +78,7 @@ class AgendaApp:
   def __init__(self, root):
     self.root = root
     self.root.title("Agenda Pessoal")
-    self.root.geometry("780x620")
+    self.root.geometry("600x600")
     self.root.config(bg="#f0f2f5")
 
     # Garantir que a tabela existe
@@ -87,30 +157,24 @@ class AgendaApp:
     ).pack(side="left", padx=5)
     tk.Button(
         btn_frame,
-        text="Atualizar",
-        command=self.atualizar_registro,
-        bg="#2196F3",
-        fg="white",
-        font=("Arial", 10, "bold"),
-        width=10,
+      "Atualizar",
+      self.atualizar_registro,
+      "#3977C5",
+      "#2D64AA",
     ).pack(side="left", padx=5)
-    tk.Button(
+    BotaoArredondado(
         btn_frame,
-        text="Excluir",
-        command=self.excluir_registro,
-        bg="#f44336",
-        fg="white",
-        font=("Arial", 10, "bold"),
-        width=10,
+      "Excluir",
+      self.excluir_registro,
+      "#D94F52",
+      "#BC3F43",
     ).pack(side="left", padx=5)
-    tk.Button(
+    BotaoArredondado(
         btn_frame,
-        text="Limpar",
-        command=self.limpar_campos,
-        bg="#9e9e9e",
-        fg="white",
-        font=("Arial", 10, "bold"),
-        width=10,
+      "Limpar",
+      self.limpar_campos,
+      "#697586",
+      "#536170",
     ).pack(side="left", padx=5)
 
     # Frame de Listagem e Filtro
@@ -136,17 +200,19 @@ class AgendaApp:
     ).pack(side="left", padx=5)
     self.entry_filtro = tk.Entry(filtro_frame, font=("Arial", 9), width=15)
     self.entry_filtro.pack(side="left", padx=5)
-    tk.Button(
+    BotaoArredondado(
         filtro_frame,
-        text="Filtrar",
-        command=self.filtrar_data,
-        font=("Arial", 9),
+      "Filtrar",
+      self.filtrar_data,
+      "#168A72",
+      "#11745F",
     ).pack(side="left", padx=5)
-    tk.Button(
+    BotaoArredondado(
         filtro_frame,
-        text="Mostrar Todos",
-        command=self.atualizar_tabela,
-        font=("Arial", 9),
+      "Mostrar Todos",
+      self.atualizar_tabela,
+      "#697586",
+      "#536170",
     ).pack(side="left", padx=5)
 
     # Tabela (Treeview)
